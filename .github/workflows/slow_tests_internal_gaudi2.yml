@@ -3,11 +3,6 @@ name: (Gaudi2) Non-regression tests
 on:
   pull_request_review:
     types: [submitted]
-    # Trigger only when a review is submitted and it is approved
-    # You can adjust this to match specific conditions as needed
-    branches-ignore:
-      - master
-    types: [approved]
 
 concurrency:
   group: ${{ github.workflow }}
@@ -15,6 +10,7 @@ concurrency:
 jobs:
   stable-diffusion:
     name: Test Stable Diffusion
+    if: github.event.review.state == 'approved'
     runs-on: self-hosted
     steps:
       - name: Checkout
@@ -31,6 +27,8 @@ jobs:
             -e HABANA_VISIBLE_DEVICES=all \
             -e OMPI_MCA_btl_vader_single_copy_mechanism=none \
             -e GAUDI2_CI=1 \
+            -e HTTP_PROXY=http://proxy-chain.intel.com:911 \
+            -e HTTPS_PROXY=http://proxy-chain.intel.com:912 \
             --cap-add=sys_nice \
             --net=host \
             --ipc=host \
