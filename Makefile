@@ -67,6 +67,58 @@ slow_tests_text_generation_example: test_installs
 	python -m pip install git+https://github.com/HabanaAI/DeepSpeed.git@1.14.0
 	python -m pytest tests/test_text_generation_example.py tests/test_encoder_decoder.py -v -s --token $(TOKEN)
 
+# Run question-ansering test
+slow_tests_question_answering_example: test_installs
+	python -m pytest tests/test_examples.py -v -s -k "run_qa"
+
+# Run sequence-classification glue test
+slow_tests_glue_example: test_installs
+	python -m pytest tests/test_examples.py -v -s -k "run_glue"
+
+# Run language-modeling clm test
+slow_tests_clm_example: test_installs
+	python -m pytest tests/test_examples.py -v -s -k "run_clm"
+
+# Run summarization test
+slow_tests_summarization_example: test_installs
+	python -m pytest tests/test_examples.py -v -s -k "run_summarization"
+
+# Run image-classification test
+slow_tests_image_classification_example: test_installs
+	python -m pytest tests/test_examples.py -v -s -k "run_image_classification"
+
+# Run mlm test
+slow_tests_question_answering_example: test_installs
+	python -m pytest tests/test_examples.py -v -s -k "run_mlm"
+
+# Run audio-classification test
+slow_tests_audio_classification_example: test_installs
+	python -m pytest tests/test_examples.py -v -s -k "run_audio_classification"
+
+# Run run_speech_recognition_ctc test
+slow_speech_recognition_ctc_example: test_installs
+	python -m pytest tests/test_examples.py -v -s -k "run_speech_recognition_ctc"
+
+# Run run_seq2seq_qa test
+slow_tests_seq2seq_qa_example: test_installs
+	python -m pytest tests/test_examples.py -v -s -k "run_seq2seq_qa"
+
+# Run clip test
+slow_tests_clip_example: test_installs
+	python -m pytest tests/test_examples.py -v -s -k "run_clip"
+
+# Run run_bridgetower test
+slow_tests_bridgetower_example: test_installs
+	python -m pytest tests/test_examples.py -v -s -k "run_bridgetower"
+
+# Run run_lora_clm test
+slow_tests_lora_clm_example: test_installs
+	python -m pytest tests/test_examples.py -v -s -k "lora_clm"
+
+# Run run_speech_recognition_seq2seq test
+slow_tests_speech_recognition_seq2seq_example: test_installs
+	python -m pytest tests/test_examples.py -v -s -k "run_speech_recognition_seq2seq"
+
 slow_tests_fsdp: test_installs
 	python -m pytest tests/test_fsdp_examples.py -v -s
 
@@ -119,3 +171,4 @@ clean:
 
 test_installs:
 	python -m pip install .[tests]
+	pip install pytest==8.0.0
