@@ -10,7 +10,6 @@ on:
         required: true
         default: 'fast-test'
         options:
-          - fast-test
           - qa
           - glue
           - clm
@@ -28,7 +27,7 @@ on:
 jobs:
   qa_validation:
     name: QA Model Validation
-    if: github.event.review.state == 'approved'
+    if: github.event.review.state == 'approved' || github.event_name == 'workflow_dispatch'
     runs-on: self-hosted
     steps:
       - name: Checkout
