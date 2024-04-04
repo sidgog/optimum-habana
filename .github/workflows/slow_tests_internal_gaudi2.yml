@@ -6,6 +6,7 @@ on:
   workflow_dispatch:
     inputs:
       selected_option:
+        type: choice
         description: 'Select one of the following options'
         required: true
         default: 'fast-test'
