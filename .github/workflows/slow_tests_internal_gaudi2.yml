@@ -1,0 +1,54 @@
+name: QA Model Validation
+
+on:
+  pull_request_review:
+    types: [submitted]
+  workflow_dispatch:
+    inputs:
+      selected_option:
+        type: choice
+        description: 'Select one of the following options'
+        required: true
+        default: 'fast-test'
+        options:
+          - qa
+          - glue
+          - clm
+          - summarization
+          - input_from_dispatch
+          - mlm
+          - audio_classification
+          - speech_recognition_ctc
+          - seq2seq_qa
+          - clip
+          - bridgetower
+          - lora_clm
+          - speech_recognition_seq2seq
+
+jobs:
+  qa_validation:
+    name: QA Model Validation
+    if: github.event.review.state == 'approved' || github.event_name == 'workflow_dispatch'
+    runs-on: self-hosted
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Pull Docker image
+        run: docker pull vault.habana.ai/gaudi-docker/1.15.0/ubuntu22.04/habanalabs/pytorch-installer-2.2.0:latest
+
+      - name: Run tests
+        run: |
+          echo "Selected option: ${{ github.event.inputs.selected_option }}"
+          docker run \
+            -v $PWD:/root/workspace \
+            --workdir=/root/workspace \
+            --runtime=habana \
+            -e HABANA_VISIBLE_DEVICES=all \
+            -e OMPI_MCA_btl_vader_single_copy_mechanism=none \
+            -e GAUDI2_CI=1 \
+            --cap-add=sys_nice \
+            --net=host \
+            --ipc=host \
+            vault.habana.ai/gaudi-docker/1.15.0/ubuntu22.04/habanalabs/pytorch-installer-2.2.0:latest \
+            bash tests/ci/model_test.sh ${{ github.event.inputs.selected_option }}
