@@ -15,8 +15,8 @@ on:
           - glue
           - clm
           - summarization
-          - input_from_dispatch
           - mlm
+          - image_classification
           - audio_classification
           - speech_recognition_ctc
           - seq2seq_qa
@@ -51,4 +51,4 @@ jobs:
             --net=host \
             --ipc=host \
             vault.habana.ai/gaudi-docker/1.15.0/ubuntu22.04/habanalabs/pytorch-installer-2.2.0:latest \
-            bash tests/ci/model_test.sh ${{ github.event.inputs.selected_option }}
+            bash tests/ci/model_tests.sh ${{ github.event.inputs.selected_option }}
